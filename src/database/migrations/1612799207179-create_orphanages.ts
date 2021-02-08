@@ -34,7 +34,11 @@ export class createOrphanages1612799207179 implements MigrationInterface {
                     default: false,
                 },
                 {
-                    name: 'logitude',
+                    name: 'opening_hours',
+                    type: 'varchar',
+                },
+                {
+                    name: 'longitude',
                     type: 'decimal',
                     precision: 2,
                     scale: 10,
