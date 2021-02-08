@@ -20,6 +20,8 @@ export const OrphanagesController = {
         res.status(200).json(orphanage);
     },
     create: async (req: Request, res: Response) => {
+        const images = (req.files as Express.Multer.File[]).map(image => ({ path: image.filename }));
+
         const {
             name,
             about,
@@ -35,6 +37,7 @@ export const OrphanagesController = {
         const newOrphanage = orphanagesRepository.create({
             name,
             about,
+            images,
             latitude,
             longitude,
             instructions,
