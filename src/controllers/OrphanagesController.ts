@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { getRepository } from 'typeorm';
+import { OrphanagesView } from '../views/OrphanagesView';
 
 import Orphanage from './../models/Orphanage';
 
@@ -9,7 +10,7 @@ export const OrphanagesController = {
 
         const orphanages = await orphanagesRepository.find({ relations: ['images'] });
 
-        res.status(200).json(orphanages);
+        res.status(200).json(OrphanagesView.renderMany(orphanages));
     },
     show: async (req: Request, res: Response) => {
         const { id } = req.params;
@@ -17,7 +18,7 @@ export const OrphanagesController = {
 
         const orphanage = await orphanagesRepository.findOneOrFail(id, { relations: ['images'] });
 
-        res.status(200).json(orphanage);
+        res.status(200).json(OrphanagesView.render(orphanage));
     },
     create: async (req: Request, res: Response) => {
         const images = (req.files as Express.Multer.File[]).map(image => ({ path: image.filename }));
@@ -47,6 +48,6 @@ export const OrphanagesController = {
 
         await orphanagesRepository.save(newOrphanage);
 
-        return res.status(201).json(Orphan(newOrphanage));
+        return res.status(201).json(OrphanagesView.render(newOrphanage));
     }
 }
