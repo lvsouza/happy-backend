@@ -11,6 +11,14 @@ export const OrphanagesController = {
 
         res.status(200).json(orphanages);
     },
+    show: async (req: Request, res: Response) => {
+        const { id } = req.params;
+        const orphanagesRepository = getRepository(Orphanage);
+
+        const orphanage = await orphanagesRepository.findOneOrFail(id);
+
+        res.status(200).json(orphanage);
+    },
     create: async (req: Request, res: Response) => {
         const {
             name,
