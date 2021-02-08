@@ -7,7 +7,7 @@ export const OrphanagesController = {
     index: async (req: Request, res: Response) => {
         const orphanagesRepository = getRepository(Orphanage);
 
-        const orphanages = await orphanagesRepository.find();
+        const orphanages = await orphanagesRepository.find({ relations: ['images'] });
 
         res.status(200).json(orphanages);
     },
@@ -15,7 +15,7 @@ export const OrphanagesController = {
         const { id } = req.params;
         const orphanagesRepository = getRepository(Orphanage);
 
-        const orphanage = await orphanagesRepository.findOneOrFail(id);
+        const orphanage = await orphanagesRepository.findOneOrFail(id, { relations: ['images'] });
 
         res.status(200).json(orphanage);
     },
@@ -47,6 +47,6 @@ export const OrphanagesController = {
 
         await orphanagesRepository.save(newOrphanage);
 
-        return res.status(201).json(newOrphanage);
+        return res.status(201).json(Orphan(newOrphanage));
     }
 }
