@@ -2,8 +2,8 @@ import express from 'express';
 import 'express-async-errors';
 import path from 'path';
 
-import './database/connection';
 import { ErrorHandler } from './errors/ErrorHandler';
+import './database/connection';
 
 import { Routes } from './Routes';
 

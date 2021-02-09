@@ -1,7 +1,8 @@
 import { Request, Response } from 'express';
 import { getRepository } from 'typeorm';
-import { OrphanagesView } from '../views/OrphanagesView';
+import * as Yup from 'yup';
 
+import { OrphanagesView } from '../views/OrphanagesView';
 import Orphanage from './../models/Orphanage';
 
 export const OrphanagesController = {
@@ -33,9 +34,7 @@ export const OrphanagesController = {
             open_on_weekends,
         } = req.body;
 
-        const orphanagesRepository = getRepository(Orphanage);
-
-        const newOrphanage = orphanagesRepository.create({
+        const data = {
             name,
             about,
             images,
@@ -44,7 +43,26 @@ export const OrphanagesController = {
             instructions,
             opening_hours,
             open_on_weekends,
+        };
+
+        const validationShema = Yup.object().shape({
+            name: Yup.string().required(),
+            latitude: Yup.number().required(),
+            longitude: Yup.number().required(),
+            instructions: Yup.string().required(),
+            opening_hours: Yup.string().required(),
+            about: Yup.string().required().max(300),
+            open_on_weekends: Yup.boolean().required(),
+            images: Yup.array(Yup.object().shape({
+                path: Yup.string().required(),
+            })),
         });
+
+        await validationShema.validate(data, { abortEarly: false });
+
+        const orphanagesRepository = getRepository(Orphanage);
+
+        const newOrphanage = orphanagesRepository.create(data);
 
         await orphanagesRepository.save(newOrphanage);
 
