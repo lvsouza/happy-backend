@@ -1,11 +1,10 @@
-import Image from "../models/Image";
 import Orphanage from "../models/Orphanage";
-import { Optional } from "../types";
 import { ImagesView } from "./ImagesView";
 
 export const OrphanagesView = {
     render: (orphanage: Orphanage) => {
         return {
+            id: orphanage.id,
             name: orphanage.name,
             about: orphanage.about,
             latitude: orphanage.latitude,
